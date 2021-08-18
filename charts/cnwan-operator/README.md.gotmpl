@@ -1,0 +1,156 @@
+# CN-WAN Operator Helm Chart
+
+{{ template "chart.badgesSection" . }}
+
+{{ template "chart.description" . }}
+
+## Useful links
+
+[Project's Homepage]({{ template "chart.homepage" . }})
+[Documentation](https://github.com/CloudNativeSDWAN/cnwan-operator#documentation)
+
+**Sources**:
+{{ template "chart.sourcesList" . }}
+
+## Requirements
+
+**Kubernetes Version**: `{{ template "chart.kubeVersion" . }}`
+
+{{ template "chart.requirementsTable" . }}
+
+The `bitnami/etcd` dependency is only required if you intend to install the
+operator together with etcd. Otherwise, i.e. if you have etcd already installed
+or do not want to use etcd, it won't be needed.
+
+## Values table
+
+The behavior of the operator and the ways it connects to and manages a service
+registry can be fine tuned by setting the parameters of `operator` according
+to your needs -- e.g. by setting a value to `operator.namespacePolicy` -- and
+those of the service registry according to the one you are going to use -- e.g.
+`operator.etcd` or `operator.googleServiceDirectory`.
+
+Values that start with `etcd` -- e.g. `etcd.auth.rbac.enabled` will configure
+the etcd cluster that will be installed along with the operator in case you set
+`operator.etcd.install` to `true`, otherwise they will be ignored.
+
+Alternatively, you may download the `values.yaml` file locally and modify those
+values directly from there:
+
+```bash
+helm show values cnwan/cnwan-operator > /path/to/values.yaml
+```
+
+Once you are satisfied with the values, run:
+
+```bash
+helm install my-operator sunsince90new/cnwan-operator -f /path/to/values.yaml
+```
+
+We highly recommend you to read the
+[official documentation](https://github.com/CloudNativeSDWAN/cnwan-operator/blob/master/docs/configuration.md)
+to better understand the operator's settings.
+
+Finally, look at [examples](#examples) to learn more.
+
+{{ template "chart.valuesTable" . }}
+
+***
+
+## Examples
+
+The following are quickstarts/examples to demonstrate how to deploy the
+operator and configure it to use a certain service registry.
+
+Refer to the [values table](#values-table) above for the meaning of the values
+that have been set as `--set` or `--set-file`.
+
+Please note that you can group all settings together with one `--set` only by
+separating all values with commas, but in the following examples we use
+`--set` for each separate setting to make the example more reader-friendly.
+
+### Usage with Google Service Directory
+
+This will deploy the operator to your cluster and will configure it to use
+Google Service Directory.
+
+It will need a valid
+[service account](https://cloud.google.com/iam/docs/service-accounts)
+in order to log in to GCP correctly: once you have located it, set its path
+with `--set-file operator.googleServiceDirectory.serviceAccount <path>`. In
+the following example, we assume its path is `$HOME/Desktop/service-account.json`.
+
+```bash
+kubectl create ns cnwan-operator-system
+helm install cnwan-operator cnwan/cnwan-operator \
+--set operator.namespaceListPolicy=allowlist \
+--set operator.serviceAnnotations="{traffic-profile}" \
+--set operator.serviceRegistry=ServiceDirectory \
+--set operator.googleServiceDirectory.projectID=my-project-dg502 \
+--set operator.googleServiceDirectory.defaultRegion=us-west2 \
+--set-file operator.googleServiceDirectory.serviceAccount=$HOME/Desktop/service-account.json \
+-n cnwan-operator-system
+```
+
+If you are going to deploy this on *GKE* and want to use your default project
+and you want your services to be registered on the same region as your *GKE*
+cluster, you may omit `defaultRegion` and `projectID` values, like so:
+
+```bash
+kubectl create ns cnwan-operator-system
+helm install cnwan-operator cnwan/cnwan-operator \
+--set operator.namespaceListPolicy=allowlist \
+--set operator.serviceAnnotations="{traffic-profile}" \
+--set operator.serviceRegistry=ServiceDirectory \
+--set-file operator.googleServiceDirectory.serviceAccount=$HOME/Desktop/service-account.json \
+-n cnwan-operator-system
+```
+
+### Usage with etcd
+
+You may choose to deploy the operator along with a brand new etcd installation
+and make it automatically configure the appropriate values for connecting and
+managing etcd, or decide to only deploy the operator. In the latter case, you
+may need to provide some values manually.
+
+For brevity, some of the values here have been omitted and their default values
+will apply in that case. Please refer to the [values table](#values-table)
+above if you want to add other values and to know what they mean.
+
+#### Installing the operator and etcd
+
+To deploy the operator and etcd together, you can run
+
+```bash
+kubectl create ns cnwan-operator-system
+helm install cnwan-operator cnwan/cnwan-operator \
+--set operator.serviceAnnotations="{traffic-profile}" \
+--set operator.serviceRegistry=etcd \
+--set operator.etcd.install=true \
+-n cnwan-operator-system
+```
+
+Now wait a few minutes until service registry gets into ready state
+
+```bash
+watch kubectl get pods -n cnwan-operator-system
+```
+
+#### Installing the operator without etcd
+
+This is the way to install the operator in case you have etcd already running
+somewhere or you just want to install it and managing. Let's suppose your etcd
+installation can be reached via DNS name `my-etcd.etcd` on port `8080` and the
+password is `my-PWD`.
+
+```bash
+kubectl create ns cnwan-operator-system
+helm install cnwan-operator cnwan/cnwan-operator \
+--set operator.serviceAnnotations="{traffic-profile}" \
+--set operator.serviceRegistry=etcd \
+--set operator.etcd.endpoints="{my-etcd.etcd:8080}" \
+--set operator.etcd.password="my-PWD" \
+-n cnwan-operator-system
+```
+
+{{ template "chart.maintainersSection" . }}

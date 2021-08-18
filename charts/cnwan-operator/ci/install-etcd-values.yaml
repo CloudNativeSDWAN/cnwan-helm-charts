@@ -1,0 +1,5 @@
+operator:
+  serviceAnnotations: [traffic-profile]
+  serviceRegistry: etcd
+  etcd:
+    install: true

@@ -1,0 +1,37 @@
+apiVersion: v2
+appVersion: "v0.5.0"
+version: "1.0.0"
+type: application
+name: cnwan-operator
+description: |
+  Register and manage your Kubernetes Services to a Service Registry.
+
+  `v0.5.0` makes it easier for you to deploy the operator on your cluster as it
+  does not need any dependency injected into it anymore, i.e. `ConfigMap`s and
+  `Secret`s will now be automatically retrieved by the operataor from the
+  cluster.
+
+  Additionally, in case you are running the operator on *GKE* and choosing to
+  use *Service Directory* you may now leave some of the settings empty and the
+  operator will detect your project ID and region automatically and therefore
+  set up *Service Directory* without you having to touch anything.
+# https://github.com/helm/helm/issues/6190
+kubeVersion: ">= 1.11.0-0"
+home: https://github.com/CloudNativeSDWAN/cnwan-operator
+icon: https://avatars.githubusercontent.com/u/66446392?s=200&v=4
+keywords:
+  - cluster
+  - sd-wan
+  - networking
+  - service-registry
+maintainers:
+  - name: CloudNativeSDWAN
+    email: cnwan@cisco.com
+    url: https://github.com/CloudNativeSDWAN/cnwan-operator/blob/master/OWNERS.md
+sources:
+  - https://github.com/CloudNativeSDWAN/cnwan-operator
+dependencies:
+- name: etcd
+  version: "> 6.2.0"
+  repository: https://charts.bitnami.com/bitnami
+  condition: operator.etcd.install
