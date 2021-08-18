@@ -1,0 +1,54 @@
+name: Generate Chart Readme
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "charts/cnwan-operator/values.yaml"
+      - "charts/cnwan-operator/Chart.yaml"
+      - "charts/cnwan-operator/README.md.gotmpl"
+
+jobs:
+  generate-chart-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout norwoodj/helm-docs
+        uses: actions/checkout@v2
+        with:
+          repository: norwoodj/helm-docs
+          path: readme-generator
+
+      - name: Setup go
+        uses: actions/setup-go@v2
+
+      - name: Cache go mod
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Install helm-docs
+        run: cd readme-generator/cmd/helm-docs && go build -a -o helm-docs *.go
+
+      - name: Checkout to repo
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+          path: charts
+
+      - name: Generate Readme
+        run: ./readme-generator/cmd/helm-docs/helm-docs ./charts/cnwan-operator
+
+      - run: |
+          cd charts
+          git config user.email cnwan@cisco.com
+          git config user.name CN-WAN Bot
+          git add ./charts/cnwan-operator/README.md
+          git diff-index --quiet HEAD || git commit -s -m "Generate chart readme"
+          git push

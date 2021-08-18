@@ -1,0 +1,127 @@
+image:
+  # image.registry -- The registry where to get the container image.
+  registry: ghcr.io
+  # image.repository -- The repository where to get the container image inside
+  # the registry specified above.
+  repository: cloudnativesdwan/cnwan-operator
+  # image.tag -- The tag for the container image.
+  # @default -- The same as `appVersion` from `Chart.yaml`.
+  tag: ""
+  # image.pullPolicy -- The `pullPolicy` for this container image.
+  pullPolicy: Always
+  # image.pullSecrets -- Secrets to use to pull the image, in case the
+  # provided repository is private.
+  # @default -- The default repository is public, so no secret will be needed.
+  pullSecrets: []
+
+
+operator:
+  # operator.namespaceListPolicy -- The namespace list policy. Must be either
+  # `allowlist` or `blocklist`.
+  # [Learn more here](https://github.com/CloudNativeSDWAN/cnwan-operator/blob/master/docs/configuration.md)
+  namespaceListPolicy: allowlist
+
+  # operator.serviceAnnotations -- A list of service annotations that must be watched.
+  # **An error will occur if this is empty.**
+  # [Learn more here](https://github.com/CloudNativeSDWAN/cnwan-operator/blob/master/docs/configuration.md)
+  # @default -- **At least one item must be provided.**.
+  serviceAnnotations: []
+
+  # operator.serviceRegistry -- The service registry to use to register your resources.
+  # Must be either `etcd` or `ServiceDirectory`.
+  # @default -- Required: will throw an error if not provided or invalid.
+  serviceRegistry: <service-registry>
+
+  # operator.googleServiceDirectory -- Options about service directory. Will be
+  # ignored if `operator.serviceRegistry` is not `gcpServiceDirectory`.
+  # @default -- Read each value below.
+  googleServiceDirectory:
+
+    # operator.googleServiceDirectory.serviceAccount -- The path to the service
+    # account to use to authenticate to GCP. **DO NOT** set this explicitly,
+    # but rather supply this information during installation with `--set-file`.
+    # See [Examples](#examples) section.
+    # @default -- **DO NOT** set explicitly: see [Examples](#examples).
+    serviceAccount: ""
+
+    # operator.googleServiceDirectory.defaultRegion --  The default region to
+    # use for Service Directory. You *must* specify this, unless you are
+    # running in GKE *and* want to use the current region, in which case you
+    # can just omit this.
+    # @default -- If not provided, will be omitted from settings.
+    defaultRegion: ""
+
+    # operator.googleServiceDirectory.projectID --  The GCP project ID to
+    # use for Service Directory. You *must* specify this, unless you are
+    # running in GKE *and* want to use the current project, in which case you
+    # can just omit this.
+    # @default -- If not provided, will be omitted from settings.
+    projectID: ""
+
+  # operator.etcd -- Options about etcd.
+  # @default -- Read each value below.
+  etcd:
+
+    # operator.etcd.install -- Whether to install etcd in the current namespace.
+    # Set this to false or omit this if you plan to install it yourself or
+    # already have it running somewhere.
+    install: false
+
+    # operator.etcd.username -- The username to connect as.
+    username: root
+
+    # operator.etcd.username -- The password to use for the username provided
+    # in `operator.etcd.username`.
+    password: "dem0-pwd"
+
+    # operator.etcd.prefix -- The prefix that all keys will share.
+    prefix: "/service-registry"
+
+    # operator.etcd.endpoints -- A list of endpoints where your etcd nodes are
+    # serving from.
+    # @default -- If `operator.etcd.install` is true, this will be filled
+    # automatically, otherwise it will be `["etcd.etcd:2379"]`.
+    endpoints:
+      - "etcd.etcd:2379"
+
+  cloudMetadata:
+    # operator.cloudMetadata.network -- Whether to register the current
+    # network name (VPC) among a service's metadata.
+    # Set auto if you are running in GKE to retrieve this value automatically.
+    # Omit if you don't need this.
+    # @default -- If empty it will be omitted from settings.
+    network: ""
+
+    # operator.cloudMetadata.subNetwork -- Whether to register the current
+    # sub-network name among a service's metadata.
+    # Set auto if you are running in GKE to retrieve this value automatically.
+    # Omit if you don't need this.
+    # @default -- If empty it will be omitted from settings.
+    subNetwork: ""
+
+# etcd -- Options about the etcd to install along with the operator, in case
+# `operator.etcd.install` is true.
+# @default -- See each value below.
+etcd:
+  # etcd.fullnameOverride -- The name to give to the etcd installation if
+  # `operator.etcd.install` is true.
+  fullnameOverride: service-registry
+
+  service:
+    # etcd.service.type -- The Kubernetes service type to use to expose the
+    # etcd installation.
+    type: ClusterIP
+
+  auth:
+    rbac:
+      # etcd.auth.rbac.enabled -- Whether to enable RBAC for etcd.
+      enabled: true
+      # etcd.auth.rbac.allowNoneAuthentication -- Whether to allow connections
+      # to etcd as an unauthenticated user.
+      allowNoneAuthentication: false
+      # etcd.auth.rbac.existingSecret -- The name of the existing secret on
+      # your cluster where to get the root password. Please **do not** modify
+      # unless you know what you are doing.
+      # @default -- The secret will be automatically deployed by the chart and
+      # this value will be created internally.
+      existingSecret: etcd-root-password
