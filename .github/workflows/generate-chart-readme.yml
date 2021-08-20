@@ -45,10 +45,16 @@ jobs:
       - name: Generate Readme
         run: ./readme-generator/cmd/helm-docs/helm-docs ./charts/cnwan-operator
 
-      - run: |
+      - name: Config git
+        run: |
           cd charts
           git config user.email cnwan@cisco.com
           git config user.name CN-WAN Bot
+
+      - name: Commit and push changes
+        run: |
+          cd charts
+          git pull
           git add ./charts/cnwan-operator/README.md
           git diff-index --quiet HEAD || git commit -s -m "Generate chart readme"
           git push
