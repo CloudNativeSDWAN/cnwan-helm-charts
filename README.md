@@ -46,7 +46,7 @@ on this command:
 helm install cnwan-operator cnwan/cnwan-operator <settings>
 ```
 
-Please refer to *CN-WAN Operator*'s [chart guide](./cnwan-operator/README.md)
+Please refer to *CN-WAN Operator*'s [chart guide](./charts/cnwan-operator/README.md)
 to learn more about the installation process and its
 [official repository](https://github.com/CloudNativeSDWAN/cnwan-operator) for
 the settings and understanding how it works.
