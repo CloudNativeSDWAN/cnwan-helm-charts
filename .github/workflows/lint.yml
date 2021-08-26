@@ -32,5 +32,5 @@ jobs:
           fi
 
       - name: Lint
-        run: ct lint
+        run: ct lint --target-branch=main
         if: steps.list-changed.outputs.changed == 'true'
