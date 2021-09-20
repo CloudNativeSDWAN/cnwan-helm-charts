@@ -4,15 +4,9 @@ metadata:
   name: {{ .Chart.Name}}-settings
 data:
   settings.yaml: |-
-      namespace:
-        {{- if and (ne .Values.operator.namespaceListPolicy "allowlist") (ne .Values.operator.namespaceListPolicy "blocklist") }}
-        {{- fail "namespaceListPolicy must be either allowlist or blocklist" }}
-        {{- else }}
-        listPolicy: {{ .Values.operator.namespaceListPolicy }}
-        {{- end }}
-      service:
-        {{- if .Values.operator.serviceAnnotations }}
-        annotations:
+      monitorNamespacesByDefault: {{ .Values.operator.monitorNamespacesByDefault }}
+      {{- if .Values.operator.serviceAnnotations }}
+      serviceAnnotations:
         {{- range .Values.operator.serviceAnnotations }}
           - {{ . }}
         {{- end }}
