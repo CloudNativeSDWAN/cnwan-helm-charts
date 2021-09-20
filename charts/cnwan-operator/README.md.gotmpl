@@ -26,9 +26,9 @@ or do not want to use etcd, it won't be needed.
 
 The behavior of the operator and the ways it connects to and manages a service
 registry can be fine tuned by setting the parameters of `operator` according
-to your needs -- e.g. by setting a value to `operator.namespacePolicy` -- and
-those of the service registry according to the one you are going to use -- e.g.
-`operator.etcd` or `operator.googleServiceDirectory`.
+to your needs -- e.g. by setting a value to `operator.serviceAnnotations` --
+and those of the service registry according to the one you are going to use --
+e.g. `operator.etcd` or `operator.googleServiceDirectory`.
 
 Values that start with `etcd` -- e.g. `etcd.auth.rbac.enabled` will configure
 the etcd cluster that will be installed along with the operator in case you set
@@ -83,7 +83,6 @@ the following example, we assume its path is `$HOME/Desktop/service-account.json
 ```bash
 kubectl create ns cnwan-operator-system
 helm install cnwan-operator cnwan/cnwan-operator \
---set operator.namespaceListPolicy=allowlist \
 --set operator.serviceAnnotations="{traffic-profile}" \
 --set operator.serviceRegistry=ServiceDirectory \
 --set operator.googleServiceDirectory.projectID=my-project-dg502 \
@@ -99,7 +98,6 @@ cluster, you may omit `defaultRegion` and `projectID` values, like so:
 ```bash
 kubectl create ns cnwan-operator-system
 helm install cnwan-operator cnwan/cnwan-operator \
---set operator.namespaceListPolicy=allowlist \
 --set operator.serviceAnnotations="{traffic-profile}" \
 --set operator.serviceRegistry=ServiceDirectory \
 --set-file operator.googleServiceDirectory.serviceAccount=$HOME/Desktop/service-account.json \
