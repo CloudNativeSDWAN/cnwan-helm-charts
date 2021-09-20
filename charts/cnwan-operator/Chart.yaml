@@ -1,20 +1,21 @@
 apiVersion: v2
-appVersion: "v0.5.0"
-version: "1.0.1"
+appVersion: "v0.6.0"
+version: "1.1.0"
 type: application
 name: cnwan-operator
 description: |
   Register and manage your Kubernetes Services to a Service Registry.
 
-  `v0.5.0` makes it easier for you to deploy the operator on your cluster as it
-  does not need any dependency injected into it anymore, i.e. `ConfigMap`s and
-  `Secret`s will now be automatically retrieved by the operataor from the
-  cluster.
+  `v0.6.0` improves the way to instruct the operator to watch or ignore events
+  occurring on a namespace: `allowlist` and `blocklist` have been removed in
+  favor of a simpler `EnableNamespacesByDefault`, which can be either be `true`
+  or `false`.
 
-  Additionally, in case you are running the operator on *GKE* and choosing to
-  use *Service Directory* you may now leave some of the settings empty and the
-  operator will detect your project ID and region automatically and therefore
-  set up *Service Directory* without you having to touch anything.
+  `operator.cnwan.io/allowed` and `operator.cnwan.io/blocked` are removed in
+  favor of just `operator.cnwan.io/monitor`, which can be either `true` or
+  `false`.
+
+  Some other improvements are also present.
 # https://github.com/helm/helm/issues/6190
 kubeVersion: ">= 1.11.0-0"
 home: https://github.com/CloudNativeSDWAN/cnwan-operator
