@@ -4,7 +4,7 @@ metadata:
   name: {{ .Chart.Name}}-settings
 data:
   settings.yaml: |-
-      monitorNamespacesByDefault: {{ .Values.operator.monitorNamespacesByDefault }}
+      watchNamespacesByDefault: {{ .Values.operator.watchNamespacesByDefault }}
       {{- if .Values.operator.serviceAnnotations }}
       serviceAnnotations:
         {{- range .Values.operator.serviceAnnotations }}

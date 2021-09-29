@@ -6,14 +6,18 @@ name: cnwan-operator
 description: |
   Register and manage your Kubernetes Services to a Service Registry.
 
-  `v0.6.0` improves the way to instruct the operator to watch or ignore events
-  occurring on a namespace: `allowlist` and `blocklist` have been removed in
-  favor of a simpler `EnableNamespacesByDefault`, which can be either be `true`
-  or `false`.
+  `v0.6.0` removes the old way of filtering namespaces to be watched with a
+  more intuitive way: instead of using concepts like `allowlist` or
+  `blocklist`, one can just set `true` or `false` in the new
+  `watchNamespacesByDefault`.
 
-  `operator.cnwan.io/allowed` and `operator.cnwan.io/blocked` are removed in
-  favor of just `operator.cnwan.io/monitor`, which can be either `true` or
-  `false`.
+  The old labels used to filter them are now dropped in favor of just
+  `operator.cnwan.io/watch` with values `enabled` or `disabled`.
+  Please refer to our documentation to know how this works.
+
+  The old, deprecated way to provide options for Google Service Directory is
+  now definitively removed and some other packages have been removed as well,
+  making the project slimmer and smoother.
 
   Some other improvements are also present.
 # https://github.com/helm/helm/issues/6190
