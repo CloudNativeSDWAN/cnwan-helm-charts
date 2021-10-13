@@ -1,18 +1,23 @@
 # CN-WAN Operator Helm Chart
 
-![Version: 1.0.1](https://img.shields.io/badge/Version-1.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.5.0](https://img.shields.io/badge/AppVersion-v0.5.0-informational?style=flat-square)
+![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.6.0](https://img.shields.io/badge/AppVersion-v0.6.0-informational?style=flat-square)
 
 Register and manage your Kubernetes Services to a Service Registry.
 
-`v0.5.0` makes it easier for you to deploy the operator on your cluster as it
-does not need any dependency injected into it anymore, i.e. `ConfigMap`s and
-`Secret`s will now be automatically retrieved by the operataor from the
-cluster.
+`v0.6.0` removes the old way of filtering namespaces to be watched with a
+more intuitive way: instead of using concepts like `allowlist` or
+`blocklist`, one can just set `true` or `false` in the new
+`watchNamespacesByDefault`.
 
-Additionally, in case you are running the operator on *GKE* and choosing to
-use *Service Directory* you may now leave some of the settings empty and the
-operator will detect your project ID and region automatically and therefore
-set up *Service Directory* without you having to touch anything.
+The old labels used to filter them are now dropped in favor of just
+`operator.cnwan.io/watch` with values `enabled` or `disabled`.
+Please refer to our documentation to know how this works.
+
+The old, deprecated way to provide options for Google Service Directory is
+now definitively removed and some other packages have been removed as well,
+making the project slimmer and smoother.
+
+Some other improvements are also present.
 
 ## Useful links
 
@@ -39,9 +44,9 @@ or do not want to use etcd, it won't be needed.
 
 The behavior of the operator and the ways it connects to and manages a service
 registry can be fine tuned by setting the parameters of `operator` according
-to your needs -- e.g. by setting a value to `operator.namespacePolicy` -- and
-those of the service registry according to the one you are going to use -- e.g.
-`operator.etcd` or `operator.googleServiceDirectory`.
+to your needs -- e.g. by setting a value to `operator.serviceAnnotations` --
+and those of the service registry according to the one you are going to use --
+e.g. `operator.etcd` or `operator.googleServiceDirectory`.
 
 Values that start with `etcd` -- e.g. `etcd.auth.rbac.enabled` will configure
 the etcd cluster that will be installed along with the operator in case you set
@@ -90,9 +95,9 @@ Finally, look at [examples](#examples) to learn more.
 | operator.googleServiceDirectory.defaultRegion | string | If not provided, will be omitted from settings. | The default region to use for Service Directory. You *must* specify this, unless you are running in GKE *and* want to use the current region, in which case you can just omit this. |
 | operator.googleServiceDirectory.projectID | string | If not provided, will be omitted from settings. | The GCP project ID to use for Service Directory. You *must* specify this, unless you are running in GKE *and* want to use the current project, in which case you can just omit this. |
 | operator.googleServiceDirectory.serviceAccount | string | **DO NOT** set explicitly: see [Examples](#examples). | The path to the service account to use to authenticate to GCP. **DO NOT** set this explicitly, but rather supply this information during installation with `--set-file`. See [Examples](#examples) section. |
-| operator.namespaceListPolicy | string | `"allowlist"` | The namespace list policy. Must be either `allowlist` or `blocklist`. [Learn more here](https://github.com/CloudNativeSDWAN/cnwan-operator/blob/master/docs/configuration.md) |
 | operator.serviceAnnotations | list | **At least one item must be provided.**. | A list of service annotations that must be watched. **An error will occur if this is empty.** [Learn more here](https://github.com/CloudNativeSDWAN/cnwan-operator/blob/master/docs/configuration.md) |
 | operator.serviceRegistry | string | Required: will throw an error if not provided or invalid. | The service registry to use to register your resources. Must be either `etcd` or `ServiceDirectory`. |
+| operator.watchNamespaceByDefault | bool | `false` | If true, the operator will watch a namespace unless instructed otherwise. If false, the operator will only watch namespaces that have been explicitly labeled. [Learn more here](https://github.com/CloudNativeSDWAN/cnwan-operator/blob/master/docs/configuration.md) |
 
 ***
 
@@ -122,7 +127,6 @@ the following example, we assume its path is `$HOME/Desktop/service-account.json
 ```bash
 kubectl create ns cnwan-operator-system
 helm install cnwan-operator cnwan/cnwan-operator \
---set operator.namespaceListPolicy=allowlist \
 --set operator.serviceAnnotations="{traffic-profile}" \
 --set operator.serviceRegistry=ServiceDirectory \
 --set operator.googleServiceDirectory.projectID=my-project-dg502 \
@@ -138,7 +142,6 @@ cluster, you may omit `defaultRegion` and `projectID` values, like so:
 ```bash
 kubectl create ns cnwan-operator-system
 helm install cnwan-operator cnwan/cnwan-operator \
---set operator.namespaceListPolicy=allowlist \
 --set operator.serviceAnnotations="{traffic-profile}" \
 --set operator.serviceRegistry=ServiceDirectory \
 --set-file operator.googleServiceDirectory.serviceAccount=$HOME/Desktop/service-account.json \
