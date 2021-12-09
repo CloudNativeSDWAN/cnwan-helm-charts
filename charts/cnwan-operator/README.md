@@ -1,6 +1,6 @@
 # CN-WAN Operator Helm Chart
 
-![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.6.0](https://img.shields.io/badge/AppVersion-v0.6.0-informational?style=flat-square)
+![Version: 1.1.1](https://img.shields.io/badge/Version-1.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.6.0](https://img.shields.io/badge/AppVersion-v0.6.0-informational?style=flat-square)
 
 Register and manage your Kubernetes Services to a Service Registry.
 
@@ -97,7 +97,7 @@ Finally, look at [examples](#examples) to learn more.
 | operator.googleServiceDirectory.serviceAccount | string | **DO NOT** set explicitly: see [Examples](#examples). | The path to the service account to use to authenticate to GCP. **DO NOT** set this explicitly, but rather supply this information during installation with `--set-file`. See [Examples](#examples) section. |
 | operator.serviceAnnotations | list | **At least one item must be provided.**. | A list of service annotations that must be watched. **An error will occur if this is empty.** [Learn more here](https://github.com/CloudNativeSDWAN/cnwan-operator/blob/master/docs/configuration.md) |
 | operator.serviceRegistry | string | Required: will throw an error if not provided or invalid. | The service registry to use to register your resources. Must be either `etcd` or `ServiceDirectory`. |
-| operator.watchNamespaceByDefault | bool | `false` | If true, the operator will watch a namespace unless instructed otherwise. If false, the operator will only watch namespaces that have been explicitly labeled. [Learn more here](https://github.com/CloudNativeSDWAN/cnwan-operator/blob/master/docs/configuration.md) |
+| operator.watchNamespacesByDefault | bool | `false` | If true, the operator will watch a namespace unless instructed otherwise. If false, the operator will only watch namespaces that have been explicitly labeled. [Learn more here](https://github.com/CloudNativeSDWAN/cnwan-operator/blob/master/docs/configuration.md) |
 
 ***
 
