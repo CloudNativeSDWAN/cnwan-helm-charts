@@ -3,6 +3,44 @@ entries:
   cnwan-operator:
   - apiVersion: v2
     appVersion: v0.6.0
+    created: "2021-12-09T10:28:08.77543423Z"
+    dependencies:
+    - condition: operator.etcd.install
+      name: etcd
+      repository: https://charts.bitnami.com/bitnami
+      version: '> 6.2.0'
+    description: 'Register and manage your Kubernetes Services to a Service Registry.  `v0.6.0`
+      removes the old way of filtering namespaces to be watched with a more intuitive
+      way: instead of using concepts like `allowlist` or `blocklist`, one can just
+      set `true` or `false` in the new `watchNamespacesByDefault`.  The old labels
+      used to filter them are now dropped in favor of just `operator.cnwan.io/watch`
+      with values `enabled` or `disabled`. Please refer to our documentation to know
+      how this works.  The old, deprecated way to provide options for Google Service
+      Directory is now definitively removed and some other packages have been removed
+      as well, making the project slimmer and smoother.  Some other improvements are
+      also present. '
+    digest: 5b8d06040f311300edd4a79ec2bb598997b88da79a6293d15e2e9d671e64f356
+    home: https://github.com/CloudNativeSDWAN/cnwan-operator
+    icon: https://avatars.githubusercontent.com/u/66446392?s=200&v=4
+    keywords:
+    - cluster
+    - sd-wan
+    - networking
+    - service-registry
+    kubeVersion: '>= 1.11.0-0'
+    maintainers:
+    - email: cnwan@cisco.com
+      name: CloudNativeSDWAN
+      url: https://github.com/CloudNativeSDWAN/cnwan-operator/blob/master/OWNERS.md
+    name: cnwan-operator
+    sources:
+    - https://github.com/CloudNativeSDWAN/cnwan-operator
+    type: application
+    urls:
+    - https://github.com/CloudNativeSDWAN/cnwan-helm-charts/releases/download/cnwan-operator-1.1.2/cnwan-operator-1.1.2.tgz
+    version: 1.1.2
+  - apiVersion: v2
+    appVersion: v0.6.0
     created: "2021-12-09T10:15:39.880189677Z"
     dependencies:
     - condition: operator.etcd.install
@@ -149,4 +187,4 @@ entries:
     urls:
     - https://github.com/CloudNativeSDWAN/cnwan-helm-charts/releases/download/cnwan-operator-1.0.0/cnwan-operator-1.0.0.tgz
     version: 1.0.0
-generated: "2021-12-09T10:15:39.880208278Z"
+generated: "2021-12-09T10:28:08.77546073Z"
