@@ -1,23 +1,13 @@
 # CN-WAN Operator Helm Chart
 
-![Version: 1.1.2](https://img.shields.io/badge/Version-1.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.6.0](https://img.shields.io/badge/AppVersion-v0.6.0-informational?style=flat-square)
+![Version: 1.2.0](https://img.shields.io/badge/Version-1.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.7.0](https://img.shields.io/badge/AppVersion-v0.7.0-informational?style=flat-square)
 
 Register and manage your Kubernetes Services to a Service Registry.
 
-`v0.6.0` removes the old way of filtering namespaces to be watched with a
-more intuitive way: instead of using concepts like `allowlist` or
-`blocklist`, one can just set `true` or `false` in the new
-`watchNamespacesByDefault`.
+`v0.7.0` brings support for AWS Cloud Map, enabling the project to
+reflect services inside your cluster to AWS's service registry.
 
-The old labels used to filter them are now dropped in favor of just
-`operator.cnwan.io/watch` with values `enabled` or `disabled`.
-Please refer to our documentation to know how this works.
-
-The old, deprecated way to provide options for Google Service Directory is
-now definitively removed and some other packages have been removed as well,
-making the project slimmer and smoother.
-
-Some other improvements are also present.
+Take a look to our changelog for a complete list of changes.
 
 ## Useful links
 
@@ -84,6 +74,9 @@ Finally, look at [examples](#examples) to learn more.
 | image.registry | string | `"ghcr.io"` | The registry where to get the container image. |
 | image.repository | string | `"cloudnativesdwan/cnwan-operator"` | The repository where to get the container image inside the registry specified above. |
 | image.tag | string | The same as `appVersion` from `Chart.yaml`. | The tag for the container image. |
+| operator.awsCloudMap | object | Read each value below. | Options about AWS Cloud Map. |
+| operator.awsCloudMap.credentials | string | **DO NOT** set explicitly: see [Examples](#examples). | The path to the credentials file to use to authenticate to AWS. **DO NOT** set this explicitly, but rather supply this information during installation with `--set-file`. See [Examples](#examples) section. |
+| operator.awsCloudMap.defaultRegion | string | "". An error will be thrown. | The default region to use for Cloud Map. This is required. |
 | operator.cloudMetadata.network | string | If empty it will be omitted from settings. | Whether to register the current network name (VPC) among a service's metadata. Set auto if you are running in GKE to retrieve this value automatically. Omit if you don't need this. |
 | operator.cloudMetadata.subNetwork | string | If empty it will be omitted from settings. | Whether to register the current sub-network name among a service's metadata. Set auto if you are running in GKE to retrieve this value automatically. Omit if you don't need this. |
 | operator.etcd | object | Read each value below. | Options about etcd. |
@@ -96,7 +89,7 @@ Finally, look at [examples](#examples) to learn more.
 | operator.googleServiceDirectory.projectID | string | If not provided, will be omitted from settings. | The GCP project ID to use for Service Directory. You *must* specify this, unless you are running in GKE *and* want to use the current project, in which case you can just omit this. |
 | operator.googleServiceDirectory.serviceAccount | string | **DO NOT** set explicitly: see [Examples](#examples). | The path to the service account to use to authenticate to GCP. **DO NOT** set this explicitly, but rather supply this information during installation with `--set-file`. See [Examples](#examples) section. |
 | operator.serviceAnnotations | list | **At least one item must be provided.**. | A list of service annotations that must be watched. **An error will occur if this is empty.** [Learn more here](https://github.com/CloudNativeSDWAN/cnwan-operator/blob/master/docs/configuration.md) |
-| operator.serviceRegistry | string | Required: will throw an error if not provided or invalid. | The service registry to use to register your resources. Must be either `etcd` or `ServiceDirectory`. |
+| operator.serviceRegistry | string | Required: will throw an error if not provided or invalid. | The service registry to use to register your resources. Must be either `etcd`, `ServiceDirectory` or `CloudMap`. |
 | operator.watchNamespacesByDefault | bool | `false` | If true, the operator will watch a namespace unless instructed otherwise. If false, the operator will only watch namespaces that have been explicitly labeled. [Learn more here](https://github.com/CloudNativeSDWAN/cnwan-operator/blob/master/docs/configuration.md) |
 | resources.limits | object | `{"cpu":"100m","memory":"30Mi"}` | The maximum amount of resources that the project can use. |
 | resources.limits.cpu | string | `"100m"` | The limit of cpu time. |
@@ -206,3 +199,24 @@ helm install cnwan-operator cnwan/cnwan-operator \
 | Name | Email | Url |
 | ---- | ------ | --- |
 | CloudNativeSDWAN | cnwan@cisco.com | https://github.com/CloudNativeSDWAN/cnwan-operator/blob/master/OWNERS.md |
+
+### Usage with AWS Cloud Map
+
+This will deploy the operator to your cluster and will configure it to use
+AWS Cloud Map.
+
+It will need a valid
+[credentials file](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html#cli-configure-files-where)
+in order to log in to AWS correctly: once you have located it, set its path
+with `--set-file operator.awsCloudMap.credentials <path>`. In
+the following example, we assume its path is `$HOME/Desktop/credentials`.
+
+```bash
+kubectl create ns cnwan-operator-system
+helm install cnwan-operator cnwan/cnwan-operator \
+--set operator.serviceAnnotations="{traffic-profile}" \
+--set operator.serviceRegistry=cloudmap \
+--set operator.awsCloudMap.defaultRegion=us-west-1 \
+--set-file operator.awsCloudMap.credentials=$HOME/Desktop/credentials \
+-n cnwan-operator-system
+```
