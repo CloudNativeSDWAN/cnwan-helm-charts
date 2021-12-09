@@ -16,11 +16,11 @@ image:
 
 
 operator:
-  # operator.watchNamespaceByDefault -- If true, the operator will watch a
+  # operator.watchNamespacesByDefault -- If true, the operator will watch a
   # namespace unless instructed otherwise. If false, the operator will only
   # watch namespaces that have been explicitly labeled.
   # [Learn more here](https://github.com/CloudNativeSDWAN/cnwan-operator/blob/master/docs/configuration.md)
-  watchNamespaceByDefault: false
+  watchNamespacesByDefault: false
 
   # operator.serviceAnnotations -- A list of service annotations that must be watched.
   # **An error will occur if this is empty.**
