@@ -1,6 +1,6 @@
 # CN-WAN Operator Helm Chart
 
-![Version: 1.1.1](https://img.shields.io/badge/Version-1.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.6.0](https://img.shields.io/badge/AppVersion-v0.6.0-informational?style=flat-square)
+![Version: 1.1.2](https://img.shields.io/badge/Version-1.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.6.0](https://img.shields.io/badge/AppVersion-v0.6.0-informational?style=flat-square)
 
 Register and manage your Kubernetes Services to a Service Registry.
 
@@ -98,6 +98,12 @@ Finally, look at [examples](#examples) to learn more.
 | operator.serviceAnnotations | list | **At least one item must be provided.**. | A list of service annotations that must be watched. **An error will occur if this is empty.** [Learn more here](https://github.com/CloudNativeSDWAN/cnwan-operator/blob/master/docs/configuration.md) |
 | operator.serviceRegistry | string | Required: will throw an error if not provided or invalid. | The service registry to use to register your resources. Must be either `etcd` or `ServiceDirectory`. |
 | operator.watchNamespacesByDefault | bool | `false` | If true, the operator will watch a namespace unless instructed otherwise. If false, the operator will only watch namespaces that have been explicitly labeled. [Learn more here](https://github.com/CloudNativeSDWAN/cnwan-operator/blob/master/docs/configuration.md) |
+| resources.limits | object | `{"cpu":"100m","memory":"30Mi"}` | The maximum amount of resources that the project can use. |
+| resources.limits.cpu | string | `"100m"` | The limit of cpu time. |
+| resources.limits.memory | string | `"30Mi"` | The memory limit. |
+| resources.requests | object | `{"cpu":"100m","memory":"20Mi"}` | The amount of resources that the project needs. |
+| resources.requests.cpu | string | `"100m"` | The amount of cpu time requested. |
+| resources.requests.memory | string | `"20Mi"` | The amount of memory requested. |
 
 ***
 
