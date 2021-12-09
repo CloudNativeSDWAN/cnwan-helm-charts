@@ -1,25 +1,15 @@
 apiVersion: v2
-appVersion: "v0.6.0"
-version: "1.1.2"
+appVersion: "v0.7.0"
+version: "1.2.0"
 type: application
 name: cnwan-operator
 description: |
   Register and manage your Kubernetes Services to a Service Registry.
 
-  `v0.6.0` removes the old way of filtering namespaces to be watched with a
-  more intuitive way: instead of using concepts like `allowlist` or
-  `blocklist`, one can just set `true` or `false` in the new
-  `watchNamespacesByDefault`.
+  `v0.7.0` brings support for AWS Cloud Map, enabling the project to
+  reflect services inside your cluster to AWS's service registry.
 
-  The old labels used to filter them are now dropped in favor of just
-  `operator.cnwan.io/watch` with values `enabled` or `disabled`.
-  Please refer to our documentation to know how this works.
-
-  The old, deprecated way to provide options for Google Service Directory is
-  now definitively removed and some other packages have been removed as well,
-  making the project slimmer and smoother.
-
-  Some other improvements are also present.
+  Take a look to our changelog for a complete list of changes.
 # https://github.com/helm/helm/issues/6190
 kubeVersion: ">= 1.11.0-0"
 home: https://github.com/CloudNativeSDWAN/cnwan-operator
