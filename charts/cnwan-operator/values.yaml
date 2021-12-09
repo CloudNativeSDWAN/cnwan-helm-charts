@@ -14,6 +14,21 @@ image:
   # @default -- The default repository is public, so no secret will be needed.
   pullSecrets: []
 
+resources:
+  # resources.limits -- The maximum amount of resources that the project can
+  # use.
+  limits:
+    # resources.limits.cpu -- The limit of cpu time.
+    cpu: 100m
+    # resources.limits.memory -- The memory limit.
+    memory: 30Mi
+  # resources.requests -- The amount of resources that the project needs.
+  requests:
+    # resources.requests.cpu -- The amount of cpu time requested.
+    cpu: 100m
+    # resources.requests.memory -- The amount of memory requested.
+    memory: 20Mi
+
 
 operator:
   # operator.watchNamespacesByDefault -- If true, the operator will watch a
