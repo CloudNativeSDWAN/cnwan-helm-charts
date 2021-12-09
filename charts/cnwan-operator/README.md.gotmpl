@@ -152,3 +152,24 @@ helm install cnwan-operator cnwan/cnwan-operator \
 ```
 
 {{ template "chart.maintainersSection" . }}
+
+### Usage with AWS Cloud Map
+
+This will deploy the operator to your cluster and will configure it to use
+AWS Cloud Map.
+
+It will need a valid
+[credentials file](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html#cli-configure-files-where)
+in order to log in to AWS correctly: once you have located it, set its path
+with `--set-file operator.awsCloudMap.credentials <path>`. In
+the following example, we assume its path is `$HOME/Desktop/credentials`.
+
+```bash
+kubectl create ns cnwan-operator-system
+helm install cnwan-operator cnwan/cnwan-operator \
+--set operator.serviceAnnotations="{traffic-profile}" \
+--set operator.serviceRegistry=cloudmap \
+--set operator.awsCloudMap.defaultRegion=us-west-1 \
+--set-file operator.awsCloudMap.credentials=$HOME/Desktop/credentials \
+-n cnwan-operator-system
+```

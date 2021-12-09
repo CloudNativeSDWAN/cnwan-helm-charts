@@ -14,8 +14,16 @@ data:
         {{- fail "no service annotations provided" }}
         {{- end }}
       serviceRegistry:
-        {{- if and (ne (lower .Values.operator.serviceRegistry) "etcd") (ne (lower .Values.operator.serviceRegistry) "servicedirectory") }}
+        {{- if and (ne (lower .Values.operator.serviceRegistry) "etcd") (and (ne (lower .Values.operator.serviceRegistry) "servicedirectory") (ne (lower .Values.operator.serviceRegistry) "cloudmap") ) }}
         {{- fail "service registry defined in serviceRegistry is empty or not supported" }}
+        {{- end }}
+        {{- if eq (lower .Values.operator.serviceRegistry) "cloudmap" }}
+        awsCloudMap:
+          {{- if .Values.operator.awsCloudMap.defaultRegion }}
+          defaultRegion: {{ .Values.operator.awsCloudMap.defaultRegion }}
+          {{- else }}
+          {{- fail "no region provided for Cloud Map" }}
+          {{- end }}
         {{- end }}
         {{- if eq (lower .Values.operator.serviceRegistry) "etcd" }}
         etcd:

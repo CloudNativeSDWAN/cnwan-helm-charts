@@ -44,7 +44,7 @@ operator:
   serviceAnnotations: []
 
   # operator.serviceRegistry -- The service registry to use to register your resources.
-  # Must be either `etcd` or `ServiceDirectory`.
+  # Must be either `etcd`, `ServiceDirectory` or `CloudMap`.
   # @default -- Required: will throw an error if not provided or invalid.
   serviceRegistry: <service-registry>
 
@@ -99,6 +99,22 @@ operator:
     # automatically, otherwise it will be `["etcd.etcd:2379"]`.
     endpoints:
       - "etcd.etcd:2379"
+
+  # operator.awsCloudMap -- Options about AWS Cloud Map.
+  # @default -- Read each value below.
+  awsCloudMap:
+
+    # operator.awsCloudMap.defaultRegion --  The default region to
+    # use for Cloud Map. This is required.
+    # @default -- "". An error will be thrown.
+    defaultRegion: ""
+
+    # operator.awsCloudMap.credentials -- The path to the credentials file
+    # to use to authenticate to AWS. **DO NOT** set this explicitly,
+    # but rather supply this information during installation with `--set-file`.
+    # See [Examples](#examples) section.
+    # @default -- **DO NOT** set explicitly: see [Examples](#examples).
+    credentials: ""
 
   cloudMetadata:
     # operator.cloudMetadata.network -- Whether to register the current
