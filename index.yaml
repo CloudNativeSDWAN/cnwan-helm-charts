@@ -3,6 +3,38 @@ entries:
   cnwan-operator:
   - apiVersion: v2
     appVersion: v0.7.0
+    created: "2021-12-13T09:09:21.840090911Z"
+    dependencies:
+    - condition: operator.etcd.install
+      name: etcd
+      repository: https://charts.bitnami.com/bitnami
+      version: '> 6.2.0'
+    description: 'Register and manage your Kubernetes Services to a Service Registry.  `v0.7.0`
+      brings support for AWS Cloud Map, enabling the project to reflect services inside
+      your cluster to AWS''s service registry.  Take a look to our changelog for a
+      complete list of changes. '
+    digest: 669d89ba060aa19412dcef3d2aeffe58d62ef2051eec8347b74f81ecc7f8da21
+    home: https://github.com/CloudNativeSDWAN/cnwan-operator
+    icon: https://avatars.githubusercontent.com/u/66446392?s=200&v=4
+    keywords:
+    - cluster
+    - sd-wan
+    - networking
+    - service-registry
+    kubeVersion: '>= 1.11.0-0'
+    maintainers:
+    - email: cnwan@cisco.com
+      name: CloudNativeSDWAN
+      url: https://github.com/CloudNativeSDWAN/cnwan-operator/blob/master/OWNERS.md
+    name: cnwan-operator
+    sources:
+    - https://github.com/CloudNativeSDWAN/cnwan-operator
+    type: application
+    urls:
+    - https://github.com/CloudNativeSDWAN/cnwan-helm-charts/releases/download/cnwan-operator-1.2.1/cnwan-operator-1.2.1.tgz
+    version: 1.2.1
+  - apiVersion: v2
+    appVersion: v0.7.0
     created: "2021-12-09T16:23:40.519010716Z"
     dependencies:
     - condition: operator.etcd.install
@@ -219,4 +251,4 @@ entries:
     urls:
     - https://github.com/CloudNativeSDWAN/cnwan-helm-charts/releases/download/cnwan-operator-1.0.0/cnwan-operator-1.0.0.tgz
     version: 1.0.0
-generated: "2021-12-09T16:23:40.519054016Z"
+generated: "2021-12-13T09:09:21.840375212Z"
