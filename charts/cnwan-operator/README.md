@@ -1,6 +1,6 @@
 # CN-WAN Operator Helm Chart
 
-![Version: 1.2.0](https://img.shields.io/badge/Version-1.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.7.0](https://img.shields.io/badge/AppVersion-v0.7.0-informational?style=flat-square)
+![Version: 1.2.1](https://img.shields.io/badge/Version-1.2.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.7.0](https://img.shields.io/badge/AppVersion-v0.7.0-informational?style=flat-square)
 
 Register and manage your Kubernetes Services to a Service Registry.
 
@@ -82,8 +82,9 @@ Finally, look at [examples](#examples) to learn more.
 | operator.etcd | object | Read each value below. | Options about etcd. |
 | operator.etcd.endpoints | list | If `operator.etcd.install` is true, this will be filled | A list of endpoints where your etcd nodes are serving from. automatically, otherwise it will be `["etcd.etcd:2379"]`. |
 | operator.etcd.install | bool | `false` | Whether to install etcd in the current namespace. Set this to false or omit this if you plan to install it yourself or already have it running somewhere. |
+| operator.etcd.password | string | `""` | The password to use for the username provided in `operator.etcd.password`. The chart won't deploy if this is empty. |
 | operator.etcd.prefix | string | `"/service-registry"` | The prefix that all keys will share. |
-| operator.etcd.username | string | `"root"` | The password to use for the username provided in `operator.etcd.username`. |
+| operator.etcd.username | string | `"root"` | The username to connect as. |
 | operator.googleServiceDirectory | object | Read each value below. | Options about service directory. Will be ignored if `operator.serviceRegistry` is not `gcpServiceDirectory`. |
 | operator.googleServiceDirectory.defaultRegion | string | If not provided, will be omitted from settings. | The default region to use for Service Directory. You *must* specify this, unless you are running in GKE *and* want to use the current region, in which case you can just omit this. |
 | operator.googleServiceDirectory.projectID | string | If not provided, will be omitted from settings. | The GCP project ID to use for Service Directory. You *must* specify this, unless you are running in GKE *and* want to use the current project, in which case you can just omit this. |
@@ -157,6 +158,9 @@ may need to provide some values manually.
 For brevity, some of the values here have been omitted and their default values
 will apply in that case. Please refer to the [values table](#values-table)
 above if you want to add other values and to know what they mean.
+
+Remember that you need to provide a password for communication with etcd to
+work correctly. Look at the example below to understand how to do that.
 
 #### Installing the operator and etcd
 
