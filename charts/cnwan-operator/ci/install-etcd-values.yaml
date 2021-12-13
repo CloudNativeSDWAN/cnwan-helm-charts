@@ -3,3 +3,4 @@ operator:
   serviceRegistry: etcd
   etcd:
     install: true
+    password: dem0-pwd

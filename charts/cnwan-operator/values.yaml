@@ -86,9 +86,9 @@ operator:
     # operator.etcd.username -- The username to connect as.
     username: root
 
-    # operator.etcd.username -- The password to use for the username provided
-    # in `operator.etcd.username`.
-    password: "dem0-pwd"
+    # operator.etcd.password -- The password to use for the username provided
+    # in `operator.etcd.password`. The chart won't deploy if this is empty.
+    password: ""
 
     # operator.etcd.prefix -- The prefix that all keys will share.
     prefix: "/service-registry"
